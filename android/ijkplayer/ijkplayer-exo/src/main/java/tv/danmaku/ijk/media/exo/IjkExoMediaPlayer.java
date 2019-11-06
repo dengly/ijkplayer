@@ -18,6 +18,7 @@
 package tv.danmaku.ijk.media.exo;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -204,6 +205,35 @@ public class IjkExoMediaPlayer extends AbstractMediaPlayer {
         if (mInternalPlayer == null)
             return 0;
         return mInternalPlayer.getDuration();
+    }
+
+    /**
+     * 获取截图
+     * @param bitmap
+     * @return
+     */
+    public boolean getCurrentFrame(Bitmap bitmap){
+        // TODO 实现
+        return false;
+    }
+
+    /**
+     * 录制
+     * @param file
+     * @return
+     */
+    public int startRecord(String file) {
+        // TODO 实现
+        return 0;
+    }
+
+    /**
+     * 停止录制视频
+     * @return
+     */
+    public int stopRecord() {
+        // TODO 实现
+        return 0;
     }
 
     @Override

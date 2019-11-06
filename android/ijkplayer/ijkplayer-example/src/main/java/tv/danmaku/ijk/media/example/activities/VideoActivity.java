@@ -20,6 +20,7 @@ package tv.danmaku.ijk.media.example.activities;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +36,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -60,6 +62,7 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
     private TableLayout mHudView;
     private DrawerLayout mDrawerLayout;
     private ViewGroup mRightDrawer;
+    private ImageView snapshotView;
 
     private Settings mSettings;
     private boolean mBackPressed;
@@ -121,6 +124,8 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
         // init UI
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        snapshotView = (ImageView) findViewById(R.id.snapshot_view);
 
         ActionBar actionBar = getSupportActionBar();
         mMediaController = new AndroidMediaController(this, false);
@@ -194,6 +199,18 @@ public class VideoActivity extends AppCompatActivity implements TracksFragment.I
             String playerText = IjkVideoView.getPlayerText(this, player);
             mToastTextView.setText(playerText);
             mMediaController.showOnce(mToastTextView);
+            return true;
+        } else if (id == R.id.action_toggle_snapshot) {
+            if(mVideoView.isPlaying()){
+                int width = mVideoView.getVideoWidth();
+                int height = mVideoView.getVideoHeight();
+                if(width>0 && height>0){
+                    Bitmap srcBitmap = Bitmap.createBitmap(width,
+                            height, Bitmap.Config.ARGB_8888);
+                    mVideoView.snapshotPicture(srcBitmap);
+                    snapshotView.setImageBitmap(srcBitmap);
+                }
+            }
             return true;
         } else if (id == R.id.action_toggle_render) {
             int render = mVideoView.toggleRender();

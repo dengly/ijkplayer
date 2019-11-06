@@ -19,6 +19,7 @@ package tv.danmaku.ijk.media.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Surface;
@@ -106,6 +107,26 @@ public interface IMediaPlayer {
     long getCurrentPosition();
 
     long getDuration();
+
+    /**
+     * 获取截图
+     * @param bitmap
+     * @return
+     */
+    boolean getCurrentFrame(Bitmap bitmap);
+
+    /**
+     * 录制
+     * @param file
+     * @return
+     */
+    int startRecord(String file);
+
+    /**
+     * 停止录制视频
+     * @return
+     */
+    int stopRecord();
 
     void release();
 

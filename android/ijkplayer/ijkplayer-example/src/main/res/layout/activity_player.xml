@@ -12,6 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#0099cc">
+        <ImageView
+            android:id="@+id/snapshot_view"
+            android:layout_gravity="left|top"
+            android:layout_marginTop="64dp"
+            android:layout_width="240dp"
+            android:layout_height="180dp" />
 
         <tv.danmaku.ijk.media.example.widget.media.IjkVideoView
             android:id="@+id/video_view"

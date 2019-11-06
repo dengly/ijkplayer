@@ -19,6 +19,7 @@ package tv.danmaku.ijk.media.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.view.Surface;
@@ -140,6 +141,31 @@ public class MediaPlayerProxy implements IMediaPlayer {
     @Override
     public long getDuration() {
         return mBackEndMediaPlayer.getDuration();
+    }
+    /**
+     * 获取截图
+     * @param bitmap
+     * @return
+     */
+    public boolean getCurrentFrame(Bitmap bitmap){
+        return mBackEndMediaPlayer.getCurrentFrame(bitmap);
+    }
+
+    /**
+     * 录制
+     * @param file
+     * @return
+     */
+    public int startRecord(String file) {
+        return mBackEndMediaPlayer.startRecord(file);
+    }
+
+    /**
+     * 停止录制视频
+     * @return
+     */
+    public int stopRecord() {
+        return mBackEndMediaPlayer.stopRecord();
     }
 
     @Override

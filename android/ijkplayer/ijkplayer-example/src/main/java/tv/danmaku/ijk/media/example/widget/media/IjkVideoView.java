@@ -21,6 +21,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -104,6 +105,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private boolean mCanPause = true;
     private boolean mCanSeekBack = true;
     private boolean mCanSeekForward = true;
+    private boolean doRecord = false;
 
     /** Subtitle rendering widget overlaid on top of the video. */
     // private RenderingWidget mSubtitleWidget;
@@ -720,6 +722,9 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
      */
     public void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
+            if(doRecord){
+                stopRecord();
+            }
             mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -1071,6 +1076,27 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
 
                     ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+
+                    if(mUri.toString().indexOf("rtsp")>=0){
+                        // 参考 https://www.jianshu.com/p/532d016d79e6
+                        // 最大缓冲cache是1s， 有时候网络波动，会突然在短时间内收到好几秒的数据
+                        // 因此需要播放器丢包，才不会累积延时
+                        // 这个和第三个参数packet-buffering无关。
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "max_cached_duration", 1000);
+
+                        // 无限制收流
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "infbuf", 1);
+
+                        // 设置无缓冲，这是播放器的缓冲区，有数据就播放
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "packet-buffering", 0);
+
+                        // 可选，有时候tcp模式出画面更快，因为rtsp是先udp，不成功再切到tcp的
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "rtsp_transport", "tcp");
+
+                        // 设置在解析的 url 之前 （这里设置超时为5秒）
+                        // 如果没有设置stimeout，在解析时（也就是avformat_open_input）把网线拔掉，av_read_frame会阻塞（时间单位是微妙）
+                        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "stimeout", "5000000");
+                    }
                 }
                 mediaPlayer = ijkMediaPlayer;
             }
@@ -1257,5 +1283,45 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     public int getSelectedTrack(int trackType) {
         return MediaPlayerCompat.getSelectedTrack(mMediaPlayer, trackType);
+    }
+
+    //截图
+    public boolean snapshotPicture(Bitmap srcBitmap) {
+        if (mMediaPlayer == null || !isPlaying() || srcBitmap==null ){
+            return false;
+        }
+        return mMediaPlayer.getCurrentFrame(srcBitmap);
+    }
+
+    //开始录像
+    public int startRecord(String file) {
+        if (mMediaPlayer == null || !isPlaying() || file==null ){
+            return 0;
+        }
+        doRecord = true;
+        return mMediaPlayer.startRecord(file);
+    }
+
+    //结束录像
+    public void stopRecord() {
+        doRecord = false;
+        if (mMediaPlayer == null || !isPlaying()){
+            return ;
+        }
+        mMediaPlayer.stopRecord();
+    }
+
+    public int getVideoWidth() {
+        if(mMediaPlayer != null ){
+            return mMediaPlayer.getVideoWidth();
+        }
+        return -1;
+    }
+
+    public int getVideoHeight() {
+        if(mMediaPlayer != null ){
+            return mMediaPlayer.getVideoHeight();
+        }
+        return -1;
     }
 }

@@ -22,6 +22,7 @@ set -e
 set +x
 
 FF_ACT_ARCHS_32="armv5 armv7a x86"
+FF_ACT_ARCHS_ARMS="armv5 armv7a arm64"
 FF_ACT_ARCHS_64="armv5 armv7a arm64 x86 x86_64"
 FF_ACT_ARCHS_ALL=$FF_ACT_ARCHS_64
 
@@ -39,6 +40,7 @@ echo_usage() {
     echo "  compile-openssl.sh armv5|armv7a|arm64|x86|x86_64"
     echo "  compile-openssl.sh all|all32"
     echo "  compile-openssl.sh all64"
+    echo "  compile-openssl.sh arms"
     echo "  compile-openssl.sh clean"
     echo "  compile-openssl.sh check"
     exit 1
@@ -80,6 +82,14 @@ case "$FF_TARGET" in
         for ARCH in $FF_ACT_ARCHS_64
         do
             sh tools/do-compile-openssl.sh $ARCH
+        done
+        echo_nextstep_help
+    ;;
+    arms)
+        echo_archs $FF_ACT_ARCHS_ARMS
+        for ARCH in $FF_ACT_ARCHS_ARMS
+        do
+            sh tools/do-compile-openssl.sh $ARCH $FF_TARGET_EXTRA
         done
         echo_nextstep_help
     ;;

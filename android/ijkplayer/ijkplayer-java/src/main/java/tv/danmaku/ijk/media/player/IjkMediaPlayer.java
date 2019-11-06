@@ -23,6 +23,7 @@ import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
 import android.graphics.Rect;
 import android.media.MediaCodecInfo;
@@ -679,6 +680,26 @@ public final class IjkMediaPlayer extends AbstractMediaPlayer {
 
     @Override
     public native long getDuration();
+
+    /**
+     * 获取截图
+     * @param bitmap
+     * @return
+     */
+    public native boolean getCurrentFrame(Bitmap bitmap);
+
+    /**
+     * 录制
+     * @param file
+     * @return
+     */
+    public native int startRecord(String file);
+
+    /**
+     * 停止录制视频
+     * @return
+     */
+    public native int stopRecord();
 
     /**
      * Releases resources associated with this IjkMediaPlayer object. It is
