@@ -5229,7 +5229,7 @@ int ffp_record_file(FFPlayer *ffp, AVPacket *packet)
 //截图
 void ffp_get_current_frame_l(FFPlayer *ffp, uint8_t *frame_buf)
 {
-  ALOGD("=============>start snapshot\n");
+  // ALOGD("=============>start snapshot\n");
 
   VideoState *is = ffp->is;
   Frame *vp;
@@ -5240,7 +5240,7 @@ void ffp_get_current_frame_l(FFPlayer *ffp, uint8_t *frame_buf)
   int height = vp->bmp->h;
   int width = vp->bmp->w;
 
-  ALOGD("=============>%d X %d === %d\n", width, height, vp->bmp->pitches[0]);
+  // ALOGD("=============>%d X %d === %d\n", width, height, vp->bmp->pitches[0]);
 
   // copy data to bitmap in java code
   linesize = vp->bmp->pitches[0];
@@ -5250,5 +5250,5 @@ void ffp_get_current_frame_l(FFPlayer *ffp, uint8_t *frame_buf)
       memcpy(frame_buf + i * pixels, src + i * linesize, pixels);
   }
 
-  ALOGD("=============>end snapshot\n");
+  // ALOGD("=============>end snapshot\n");
 }
