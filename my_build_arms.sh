@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# build ffmepg
+# 项目路径，可以根据自己环境修改
 cd /Volumes/Data/Workspaces/topOpenSourceProjects/ijkplayer
 
 # 拉取必要的依赖库代码
