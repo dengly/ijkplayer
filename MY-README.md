@@ -10,3 +10,9 @@
 
 ## 编译
 * 我自己的Android编译脚本[my_build_arms.sh](./my_build_arms.sh)
+
+#### windows移植
+
+###### 参考
+* [移植ijkplayer播放器到windows平台](https://blog.csdn.net/tian_20032242/article/details/84981746)
+* [一步步实现windows版ijkplayer系列文章](https://www.cnblogs.com/harlanc/p/10111290.html)
